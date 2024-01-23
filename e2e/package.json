@@ -1,0 +1,41 @@
+{
+  "scripts": {
+    "test:cov": "npx jest --coverage",
+    "test:watch": "npx jest --watch",
+    "test": "npx jest"
+  },
+  "testRegex": ".*\\.spec\\.ts$",
+  "testEnvironment": "node",
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testRegex": ".*\\.spec\\.ts$",
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "setupFilesAfterEnv": [
+      "./src/jest.setup.ts"
+    ]
+  },
+  "dependencies": {
+    "axios": "1.6.5",
+    "jest": "29.1.1",
+    "supertest": "6.3.3",
+    "ts-jest": "29.1.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "10.2.1",
+    "@nestjs/schematics": "10.0.3",
+    "@nestjs/testing": "10.2.1",
+    "@types/express": "4.17.21",
+    "@types/jest": "29.1.1",
+    "@types/node": "20.8.7",
+    "@types/supertest": "2.0.16",
+    "prettier": "^3.2.4",
+    "rimraf": "5.0.5",
+    "ts-loader": "9.5.1",
+    "ts-node": "10.9.1",
+    "tsconfig-paths": "4.2.0",
+    "typescript": "5.1.6"
+  }
+}
