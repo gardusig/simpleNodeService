@@ -1,20 +1,8 @@
-FROM node:16 AS raw
-COPY server/ /app/server/
-WORKDIR /app/server
+FROM node:21-alpine
+COPY app/ /app/
+WORKDIR /app
 RUN npm install
-
-FROM raw AS lint
-CMD ["npm", "run", "lint"]
-
-FROM raw AS build
-CMD ["npm", "run", "build"]
-
-FROM build AS run
+RUN npm run build
+RUN npm install --production
 EXPOSE 3000
-CMD ["npm", "run", "start:dev"]
-
-FROM node:16 AS final
-WORKDIR /app/server
-COPY --from=build /app/server/dist /app/server/dist
-EXPOSE 3000
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start"]

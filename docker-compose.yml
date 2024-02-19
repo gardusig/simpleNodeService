@@ -4,43 +4,56 @@ services:
   db:
     image: postgres
     restart: always
-    environment:
-      - POSTGRES_PASSWORD=postgres
-    container_name: postgres
-    volumes:
-      - ./pgdata:/var/lib/postgresql/data
     ports:
-      - '5400:5432'
-  server-lint:
+      - "${DB_EXPOSED_PORT}:${DB_INTERNAL_PORT}"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    networks:
+      - random_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    networks:
+      - random_network
+    ports:
+      - "${PGADMIN_EXPOSED_PORT}:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+
+  lint:
     build:
       context: .
-      dockerfile: docker/server.Dockerfile
+      dockerfile: docker/test.Dockerfile
       target: lint
+
+  e2e:
+    build:
+      context: .
+      dockerfile: docker/test.Dockerfile
+      target: e2e
+    environment:
+      - HOST=server
+      - PORT=${SERVER_INTERNAL_PORT}
+      - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_INTERNAL_PORT}/${DB_NAME}?schema=public&connect_timeout=${DB_CONNECTION_TIMEOUT}
+    networks:
+      - random_network
+
   server:
     build:
       context: .
       dockerfile: docker/server.Dockerfile
       target: run
     ports:
-      - "${PORT}:3000"
+      - "${SERVER_EXPOSED_PORT}:${SERVER_INTERNAL_PORT}"
     environment:
-      - NODE_ENV=development
-      - PORT=${PORT:-3000}
+      - PORT=${SERVER_INTERNAL_PORT}
+      - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_INTERNAL_PORT}/${DB_NAME}?schema=public&connect_timeout=${DB_CONNECTION_TIMEOUT}
     networks:
-      - ntwrk
-  e2e:
-    build:
-      context: .
-      dockerfile: docker/server.e2e.Dockerfile
-      target: test
-    depends_on:
-      - server
-    environment:
-      - HOST=${HOST:-server}
-      - PORT=${PORT:-3000}
-    networks:
-      - ntwrk_network
+      - random_network
 
 networks:
-  ntwrk_network:
+  random_network:
     driver: bridge
