@@ -1,10 +1,12 @@
 import { INestApplication } from '@nestjs/common/interfaces/nest-application.interface'
-import { readFileSync } from 'fs'
-import { load } from 'js-yaml'
-import { serve, setup } from 'swagger-ui-express'
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 
 export function configureSwagger(app: INestApplication): void {
-  const openApiYaml = readFileSync('openapi.yml', 'utf8')
-  const openApiDocumentation: any = load(openApiYaml)
-  app.use('/docs', serve, setup(openApiDocumentation))
+  const options = new DocumentBuilder()
+    .setTitle('Your API')
+    .setDescription('API description')
+    .setVersion('1.0')
+    .build()
+  const document = SwaggerModule.createDocument(app, options)
+  SwaggerModule.setup('docs', app, document)
 }
