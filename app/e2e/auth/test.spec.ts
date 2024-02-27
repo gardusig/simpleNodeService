@@ -1,5 +1,5 @@
 import { HttpStatus } from '@nestjs/common'
-import { CasinoProviderClient } from '../api/provider/client'
+import { RandomObjectClient } from 'e2e/api/random_object/client'
 
 const headerEmpty = {}
 const headerWithoutPassword = {
@@ -14,11 +14,11 @@ const headerForbidden = {
 }
 
 describe('[e2e] Authentication Middleware', () => {
-  const casinoProviderClient = new CasinoProviderClient()
+  const client = new RandomObjectClient()
   describe('[header] Empty Header', () => {
     it('should return HTTP 401 - UNAUTHORIZED', async () => {
       await expect(
-        casinoProviderClient.getAll!(headerEmpty)
+        client.getAll!(headerEmpty)
       ).rejects.toHaveProperty('response.status', HttpStatus.UNAUTHORIZED)
     })
   })
@@ -26,7 +26,7 @@ describe('[e2e] Authentication Middleware', () => {
   describe('[header] Missing Username', () => {
     it('should return HTTP 401 - UNAUTHORIZED', async () => {
       await expect(
-        casinoProviderClient.getAll!(headerWithoutUser)
+        client.getAll!(headerWithoutUser)
       ).rejects.toHaveProperty('response.status', HttpStatus.UNAUTHORIZED)
     })
   })
@@ -34,7 +34,7 @@ describe('[e2e] Authentication Middleware', () => {
   describe('[header] Missing Password', () => {
     it('should return HTTP 401 - UNAUTHORIZED', async () => {
       await expect(
-        casinoProviderClient.getAll!(headerWithoutPassword)
+        client.getAll!(headerWithoutPassword)
       ).rejects.toHaveProperty('response.status', HttpStatus.UNAUTHORIZED)
     })
   })
@@ -42,7 +42,7 @@ describe('[e2e] Authentication Middleware', () => {
   describe('[header] Valid header without permission', () => {
     it('should return HTTP 403 - FORBIDDEN', async () => {
       await expect(
-        casinoProviderClient.getAll!(headerForbidden)
+        client.getAll!(headerForbidden)
       ).rejects.toHaveProperty('response.status', HttpStatus.FORBIDDEN)
     })
   })

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common'
+import { RandomObjectController } from './controller'
 import { RandomObjectService, RandomObjectServiceToken } from './service'
 import { GenericModule } from '../abstract/module'
 import {
@@ -6,7 +7,6 @@ import {
   RandomObjectDatabaseToken,
 } from './database'
 import { RandomObject } from '@prisma/client'
-import { RandomObjectController } from './controller'
 
 @Module({
   imports: [

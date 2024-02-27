@@ -2,7 +2,7 @@ import { GenericController } from './controller'
 import { GenericDatabase } from './database'
 import { DynamicModule, InjectionToken, Provider, Type } from '@nestjs/common'
 import { GenericService } from './service'
-import { PrismaClientService } from '../../prisma_client/service'
+import { RandomObjectPrismaClient } from '../../prisma_client/client'
 
 interface GenericModuleOptions<T> {
   controller: Type<GenericController<T>>
@@ -33,7 +33,7 @@ export class GenericModule {
         provide: dbToken,
         useExisting: dbImplementation,
       },
-      PrismaClientService,
+      RandomObjectPrismaClient,
     ]
     const moduleMetadata: DynamicModule = {
       module: GenericModule,

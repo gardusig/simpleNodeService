@@ -1,10 +1,11 @@
 import { Logger } from '@nestjs/common'
-import { PrismaClient, RandomObject, RandomObjectEnum } from '@prisma/client'
+import { Prisma, PrismaClient, RandomObject, RandomObjectEnum } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-const randomObjectMockData: Omit<RandomObject, 'id'>[] = [
+const randomObjectMockData: RandomObject[] = [
   {
+    id: 1,
     stringValue: 'Example String 1',
     intValue: 42,
     floatValue: 3.14,
@@ -14,6 +15,7 @@ const randomObjectMockData: Omit<RandomObject, 'id'>[] = [
     enumValue: RandomObjectEnum.KAPPA,
   },
   {
+    id: 2,
     stringValue: 'Example String 2',
     intValue: 123,
     floatValue: 2.718,
@@ -26,8 +28,8 @@ const randomObjectMockData: Omit<RandomObject, 'id'>[] = [
 
 async function insertMockedData() {
   await Promise.all(
-    randomObjectMockData.map((mockData) => {
-      return prisma.randomObject.create({ data: mockData })
+    randomObjectMockData.map((mockData: RandomObject) => {
+      return prisma.randomObject.create({ data: mockData as Prisma.RandomObjectCreateInput })
     })
   )
 }

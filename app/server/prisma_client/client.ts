@@ -7,8 +7,8 @@ import {
 import { PrismaClient } from '@prisma/client'
 
 @Injectable()
-export class PrismaClientService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
-  private readonly logger = new Logger(PrismaClientService.name)
+export class RandomObjectPrismaClient extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+  private readonly logger = new Logger(RandomObjectPrismaClient.name)
 
   constructor() {
     super()

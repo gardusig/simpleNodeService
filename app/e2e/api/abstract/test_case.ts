@@ -11,7 +11,7 @@ export async function asyncAssertInitialSeed(client: AbstractClient): Promise<vo
     expect(response.data.length).toEqual(2)
 }
 
-export async function asyncAssertGetExistentElement(client: AbstractClient, idKey: string, inputData: any): Promise<void> {
+export async function asyncAssertGetExistentElement(client: AbstractClient, idKey: string, inputData: any) {
     const id = getIdFromInputData(idKey, inputData)
     const response = await client.get!(HEADER_WITH_VALID_CREDENTIALS, id)!
     expect(response).toBeDefined()
@@ -54,12 +54,12 @@ export async function asyncAssertDeleteNonExistentElement(client: AbstractClient
         .rejects.toHaveProperty('response.status', HttpStatus.NOT_FOUND)
 }
 
-export async function asyncAssertAddExistentElement(client: AbstractClient, inputData: any): Promise<void> {
+export async function asyncAssertAddExistentElement(client: AbstractClient, inputData: any) {
     await expect(client.create!(HEADER_WITH_VALID_CREDENTIALS, inputData))
         .rejects.toHaveProperty('response.status', HttpStatus.CONFLICT)
 }
 
-export async function asyncAssertAddNonExistentElement(client: AbstractClient, idKey: string, inputData: any): Promise<void> {
+export async function asyncAssertAddNonExistentElement(client: AbstractClient, idKey: string, inputData: any) {
     const response = await client.create!(HEADER_WITH_VALID_CREDENTIALS, inputData)!
     expect(response).toBeDefined()
     expect(response.status).toEqual(HttpStatus.CREATED)
@@ -67,7 +67,7 @@ export async function asyncAssertAddNonExistentElement(client: AbstractClient, i
     await asyncAssertGetExistentElement(client, idKey, inputData)
 }
 
-export async function asyncAssertDeleteAllExistingElements(client: AbstractClient, idKey: string): Promise<void> {
+export async function asyncAssertDeleteAllExistingElements(client: AbstractClient, idKey: string) {
     const response = await client.getAll!(HEADER_WITH_VALID_CREDENTIALS)!
     expect(response).toBeDefined()
     expect(response.status).toEqual(HttpStatus.OK)

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common'
 import { GenericDatabase } from '../abstract/database'
-import { PrismaClientService } from '../../prisma_client/service'
+import { RandomObjectPrismaClient } from '../../prisma_client/client'
 import { RandomObject } from '@prisma/client'
 
-export const RandomObjectDatabaseToken = 'RandomObjectDatabasePostgres'
+export const RandomObjectDatabaseToken = 'RandomObjectDatabase'
 
 @Injectable()
 export class RandomObjectDatabasePostgresImplementation extends GenericDatabase<RandomObject> {
-  constructor(prismaClient: PrismaClientService) {
+  constructor(prismaClient: RandomObjectPrismaClient) {
     super(prismaClient.randomObject, 'id')
   }
 }

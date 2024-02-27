@@ -1,12 +1,19 @@
-import axios, { AxiosResponse, Method } from 'axios'
+import axios, { AxiosInstance, AxiosResponse, Method } from 'axios'
 import {
   FULL_CLIENT_CONFIG,
   getServerUrl,
 } from '../../constants'
 import { Logger } from '@nestjs/common'
+import * as https from 'https'
 
 const MAX_RETRIES = 3
 const SERVER_URL = getServerUrl()
+
+const axiosInstance: AxiosInstance = axios.create({
+  httpsAgent: new https.Agent({
+    rejectUnauthorized: false,
+  }),
+})
 
 type Response = Promise<AxiosResponse<any>>
 
@@ -107,7 +114,7 @@ export abstract class AbstractClient {
           + `, header: ${JSON.stringify(requestHeader)}`
           + `, body: ${JSON.stringify(data)}`
         )
-        const response = await axios({
+        const response = await axiosInstance({
           method: method,
           url: url,
           data: data,
@@ -121,10 +128,11 @@ export abstract class AbstractClient {
         return response
       } catch (error) {
         if (this.isNetworkError(error)) {
-          this.logger.warn(`[attempt #${retries}] received response with error from: ${url}`
+          this.logger.warn(`[attempt #${retries}] network error making request to: ${url}`
             + `, method: ${method}`
             + `, header: ${JSON.stringify(requestHeader)}`
             + `, body: ${JSON.stringify(data)}`
+            + `, error: ${error}`
           )
         } else {
           this.logger.warn(`[attempt #${retries}] received response with error from: ${url}`

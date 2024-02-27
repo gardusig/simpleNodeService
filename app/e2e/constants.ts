@@ -18,5 +18,5 @@ export const HEALTH_CHECK_CLIENT_CONFIG = {
 export function getServerUrl() {
     const host = process.env.HOST || 'localhost'
     const port: string = process.env.PORT ?? '3000'
-    return `http://${host}:${port}/api`
+    return `https://${host}:${port}/api`
 }

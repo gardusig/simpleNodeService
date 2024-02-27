@@ -1,11 +1,11 @@
 import { data, updatedData } from './mock_data'
 import { AbstractTestSuite } from '../abstract/test_suite'
-import { CasinoGameClient } from './client'
+import { RandomObjectClient } from './client'
 
-export class CasinoGameTestSuite extends AbstractTestSuite {
+export class RandomObjectTestSuite extends AbstractTestSuite {
   constructor() {
-    super(new CasinoGameClient(), {
-      idKey: 'gameId',
+    super(new RandomObjectClient(), {
+      idKey: 'id',
       data: data,
       updatedData: updatedData,
     })
