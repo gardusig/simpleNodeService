@@ -2,10 +2,10 @@ version: '3'
 
 services:
   db:
-    image: postgres
+    image: postgres:16-alpine
     restart: always
     ports:
-      - "${DB_EXPOSED_PORT}:${DB_INTERNAL_PORT}"
+      - 2345:5432
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -13,21 +13,59 @@ services:
     networks:
       - random_network
 
-  pgadmin:
-    image: dpage/pgadmin4
+  server_0:
+    build:
+      context: .
+      dockerfile: docker/server.Dockerfile
+    environment:
+      - PORT=${SERVER_0_PORT}
+      - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?schema=public&connect_timeout=${DB_CONNECTION_TIMEOUT}
     networks:
       - random_network
-    ports:
-      - "${PGADMIN_EXPOSED_PORT}:80"
+
+  server_1:
+    build:
+      context: .
+      dockerfile: docker/server.Dockerfile
     environment:
-      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
-      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+      - PORT=${SERVER_1_PORT}
+      - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?schema=public&connect_timeout=${DB_CONNECTION_TIMEOUT}
+    networks:
+      - random_network
+
+  server_2:
+    build:
+      context: .
+      dockerfile: docker/server.Dockerfile
+    environment:
+      - PORT=${SERVER_2_PORT}
+      - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?schema=public&connect_timeout=${DB_CONNECTION_TIMEOUT}
+    networks:
+      - random_network
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx.Dockerfile
+    ports:
+      - "${NGINX_EXPOSED_PORT}:443"
+    environment:
+      - SERVER_0_HOST=server_0
+      - SERVER_0_PORT
+      - SERVER_1_HOST=server_1
+      - SERVER_1_PORT
+      - SERVER_2_HOST=server_2
+      - SERVER_2_PORT
+    networks:
+      - random_network
 
   lint:
     build:
       context: .
       dockerfile: docker/test.Dockerfile
       target: lint
+    networks:
+      - random_network
 
   e2e:
     build:
@@ -35,22 +73,9 @@ services:
       dockerfile: docker/test.Dockerfile
       target: e2e
     environment:
-      - HOST=server
-      - PORT=${SERVER_INTERNAL_PORT}
-      - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_INTERNAL_PORT}/${DB_NAME}?schema=public&connect_timeout=${DB_CONNECTION_TIMEOUT}
-    networks:
-      - random_network
-
-  server:
-    build:
-      context: .
-      dockerfile: docker/server.Dockerfile
-      target: run
-    ports:
-      - "${SERVER_EXPOSED_PORT}:${SERVER_INTERNAL_PORT}"
-    environment:
-      - PORT=${SERVER_INTERNAL_PORT}
-      - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_INTERNAL_PORT}/${DB_NAME}?schema=public&connect_timeout=${DB_CONNECTION_TIMEOUT}
+      - HOST=nginx
+      - PORT=443
+      - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?schema=public&connect_timeout=${DB_CONNECTION_TIMEOUT}
     networks:
       - random_network
 

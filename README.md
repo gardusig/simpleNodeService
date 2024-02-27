@@ -143,6 +143,26 @@ Run tests
 $ npm run test
 ```
 
+### Pipeline
+
+#### Cleanup
+
+```bash
+$ ./script/pipeline/run.sh cleanup
+```
+
+#### Lint
+
+```bash
+$ ./script/pipeline/run.sh lint
+```
+
+#### Test
+
+```bash
+$ ./script/pipeline/run.sh test
+```
+
 ## Using pgAdmin to access the PostgreSQL server
 
 With PostgreSQL container running, you can use pgAdmin to manage PostgreSQL databases in a more friendly interface.
