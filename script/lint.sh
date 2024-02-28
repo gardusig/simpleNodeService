@@ -5,9 +5,9 @@ cleanup_containers() {
 }
 
 build_images() {
-    echo "start building images..."
+    echo "start building lint image..."
     docker-compose build -q lint
-    echo "done building images"
+    echo "done building lint image"
 }
 
 run_lint() {
