@@ -5,8 +5,7 @@ Node.js project designed for building scalable and modular server-side applicati
 1. [Local Development](#local-development)
 2. [Docker usage](#docker-usage)
 3. [End to end integration tests](#end-to-end-integration-tests)
-4. [PgAdmin](#using-pgadmin-to-access-the-postgresql-server)
-5. [Database Management](#database-management)
+4. [Database Management](#database-management)
 
 ## Local Development
 
@@ -78,7 +77,7 @@ $ docker-compose build
 $ docker-compose up --detach db
 ```
 
-The database will be listening for the `${DB_INTERNAL_PORT}` within the container network. For outside connections, you must refer to it as `localhost:${DB_EXPOSED_PORT}`, example:
+The database will be listening for at port `5432` within the container network. For outside connections, it will listen at port `2345`, you must refer to it as `localhost:2345`, example:
 
 | NAME            | IMAGE    | COMMAND              | SERVICE | CREATED    | STATUS       | PORTS                  |
 | --------------- | -------- | -------------------- | ------- | ---------- | ------------ | ---------------------- |
@@ -87,25 +86,33 @@ The database will be listening for the `${DB_INTERNAL_PORT}` within the containe
 
 ### Start Server Locally
 
-To start the server and database locally, use:
+To start the servers and the load balancer
 
 ```bash
-$ docker-compose up --detach server
+$ docker-compose up --detach server_0 server_1 server_2
+$ docker-compose up --detach nginx
 ```
 
-The server will be listening for the `${SERVER_INTERNAL_PORT}` within the container network. For outside connections, you must refer to it as `localhost:${SERVER_EXPOSED_PORT}`, example:
+Each server will be listening for at the port `${SERVER_*_PORT}` within the container network. 
 
-| NAME                | IMAGE             | COMMAND              | SERVICE | CREATED       | STATUS      | PORTS                            |
-| ------------------- | ----------------- | -------------------- | ------- | ------------- | ----------- | -------------------------------- |
-| nodenestjs-server-1 | nodenestjs-server | docker-entrypoint.s… | server  | 2 seconds ago | Up 1 second | 3000/tcp, 0.0.0.0:3000->6969/tcp |
+You don't access the server directly, but through nginx, with a self signed certificate. For outside connections, you must refer to it as `https://localhost:${NGINX_EXPOSED_PORT}`, example:
 
-Once the server is running, you can access the Swagger documentation by navigating to `http://localhost:3000/docs` in your web browser.
+| NAME                  | IMAGE               | COMMAND              | SERVICE  | CREATED        | STATUS        | PORTS                         |
+| --------------------- | ------------------- | -------------------- | -------- | -------------- | ------------- | ----------------------------- |
+| nodenestjs-server_0-1 | nodenestjs-server_0 | docker-entrypoint.s… | server_0 | 40 minutes ago | Up 40 minutes |                               |
+| nodenestjs-server_1-1 | nodenestjs-server_1 | docker-entrypoint.s… | server_1 | 40 minutes ago | Up 40 minutes |                               |
+| nodenestjs-server_2-1 | nodenestjs-server_2 | docker-entrypoint.s… | server_2 | 40 minutes ago | Up 40 minutes |                               |
+| nodenestjs-nginx-1    | nodenestjs-nginx    | /docker-entrypoint.… | nginx    | 40 minutes ago | Up 40 minutes | 80/tcp, 0.0.0.0:3000->443/tcp |
+
+Once the server is running, you can access the Swagger documentation by navigating to `https://localhost:3000/docs` in your web browser.
 
 
 For logs output, you can use this command:
 
 ```bash
-$ docker-compose logs -f server
+$ docker-compose logs -f server_0
+$ docker-compose logs -f server_1
+$ docker-compose logs -f server_2
 ```
 
 ### Stopping Services
@@ -130,20 +137,16 @@ $ docker-compose run e2e
 
 ### Development
 
-From the project's root directory, navigate to the e2e folder and install the required dependencies using:
+From the project's root directory, navigate to the `app` folder and run tests using:
 
 ```bash
-$ cd e2e
-$ npm install
-```
-
-Run tests
-
-```bash
+$ cd app
 $ npm run test
 ```
 
 ### Pipeline
+
+In order to replicate the pipeline, you can run these commands:
 
 #### Cleanup
 
@@ -157,44 +160,17 @@ $ ./script/pipeline/run.sh cleanup
 $ ./script/pipeline/run.sh lint
 ```
 
+#### Start
+
+```bash
+$ ./script/pipeline/run.sh start
+```
+
 #### Test
 
 ```bash
 $ ./script/pipeline/run.sh test
 ```
-
-## Using pgAdmin to access the PostgreSQL server
-
-With PostgreSQL container running, you can use pgAdmin to manage PostgreSQL databases in a more friendly interface.
-
-### Install
-
-You can download pgAdmin [here](https://www.pgadmin.org/download/). Or use it from the docker-compose by running:
-
-```bash
-$ docker-compose up --detach pgadmin
-```
-
-You can access the UI from: http://0.0.0.0:420/
-
-### Setup Guide
-
-First you need to create a server object in pgAdmin with the details of the PostgreSQL container. To do that, just follow these steps:
-
-1. Open pgAdmin and log in with credentials from [.env](./.env):
-   - `PGADMIN_DEFAULT_EMAIL`: admin@example.com
-   - `PGADMIN_DEFAULT_PASSWORD`: admin
-2. In the left, right-click the `Servers` item, then select `Register` -> `Server`
-3. A new window will pop up. In the `General` tab, give the server a name of your choice
-4. In the `Connection` tab, input the following from [.env](./.env):
-   * `Host name/address`: db
-   * `Port`: 5432
-   * `Maintenance database`: postgres
-   * `Username`: postgres
-   * `Password`: postgres
-5. Click `Save`
-
-Now you should be able to see the server created. You can expand the server to see databases and other objects within it.
 
 ## Database Management
 
@@ -209,6 +185,7 @@ Database migrations are essential for managing changes to the database schema ov
 To run database migrations, use the following command:
 
 ```bash
+$ cd app
 $ npm run prisma:migrate
 ```
 
