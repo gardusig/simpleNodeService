@@ -1,5 +1,5 @@
 import { HttpStatus } from '@nestjs/common'
-import { RandomObjectClient } from 'e2e/api/random_object/client'
+import { RandomObjectClient } from '../api/random_object/client'
 
 const headerEmpty = {}
 const headerWithoutPassword = {
