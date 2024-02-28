@@ -9,7 +9,7 @@ datasource db {
 }
 
 model RandomObject {
-  id              Int      @id
+  id              String      @id
   stringValue     String
   intValue        Int
   floatValue      Float

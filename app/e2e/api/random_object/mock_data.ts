@@ -1,7 +1,7 @@
 import { RandomObject, RandomObjectEnum } from '@prisma/client'
 
 export const data: RandomObject = {
-  id: 3,
+  id: '3',
   stringValue: 'Example String 3',
   intValue: 420,
   floatValue: 3.1415,

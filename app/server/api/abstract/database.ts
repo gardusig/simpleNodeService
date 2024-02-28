@@ -1,6 +1,5 @@
 import { Logger } from '@nestjs/common'
 import { NotFoundException, ConflictException } from '@nestjs/common'
-import { PrismaClient } from '@prisma/client'
 
 interface DatabaseMethods {
   findUnique: (params: any) => Promise<any>;
@@ -13,24 +12,22 @@ interface DatabaseMethods {
 export abstract class GenericDatabase<T> {
   protected readonly logger = new Logger(GenericDatabase.name)
 
-  protected readonly backofficeClient: DatabaseMethods
-  protected readonly gamemanagerClient?: PrismaClient
+  protected readonly dbClient: DatabaseMethods
   protected readonly idKey: string
 
-  constructor(backofficeClient: DatabaseMethods, idKey: string, gamemanagerClient?: PrismaClient) {
-    if (!backofficeClient) {
-      this.logger.error('Prisma backoffice client is undefined in GenericDatabase constructor.')
+  constructor(dbClient: DatabaseMethods, idKey: string) {
+    if (!dbClient) {
+      this.logger.error('Prisma database client is undefined in GenericDatabase constructor.')
     }
     if (!idKey) {
       this.logger.error('ID key is undefined in GenericDatabase constructor.')
     }
-    this.backofficeClient = backofficeClient
-    this.gamemanagerClient = gamemanagerClient
+    this.dbClient = dbClient
     this.idKey = idKey
   }
 
   async findById(id: string): Promise<T> {
-    const existingRecord = await this.backofficeClient.findUnique({
+    const existingRecord = await this.dbClient.findUnique({
       where: {
         [this.idKey]: id,
       },
@@ -43,12 +40,12 @@ export abstract class GenericDatabase<T> {
   }
 
   async findAll(): Promise<T[]> {
-    return await this.backofficeClient.findMany()
+    return await this.dbClient.findMany()
   }
 
   async create(data: T, id: string): Promise<T> {
     this.logger.debug(`Creating record with ID ${id}...`)
-    const existingRecord = await this.backofficeClient.findUnique({
+    const existingRecord = await this.dbClient.findUnique({
       where: {
         [this.idKey]: id,
       },
@@ -57,13 +54,13 @@ export abstract class GenericDatabase<T> {
       this.logger.warn(`Record with ID ${id} already exists.`)
       throw new ConflictException(`Record with ID ${id} already exists.`)
     }
-    return await this.backofficeClient.create({
+    return await this.dbClient.create({
       data,
     })
   }
 
   async update(id: string, data: T): Promise<T> {
-    const existingRecord = await this.backofficeClient.findUnique({
+    const existingRecord = await this.dbClient.findUnique({
       where: {
         [this.idKey]: id,
       },
@@ -72,7 +69,7 @@ export abstract class GenericDatabase<T> {
       this.logger.warn(`Record with ID ${id} not found. Update operation skipped.`)
       throw new NotFoundException(`Record with ID ${id} not found.`)
     }
-    return await this.backofficeClient.update({
+    return await this.dbClient.update({
       where: {
         [this.idKey]: id,
       },
@@ -81,7 +78,7 @@ export abstract class GenericDatabase<T> {
   }
 
   async delete(id: string): Promise<T> {
-    const existingRecord = await this.backofficeClient.findUnique({
+    const existingRecord = await this.dbClient.findUnique({
       where: {
         [this.idKey]: id,
       },
@@ -90,7 +87,7 @@ export abstract class GenericDatabase<T> {
       this.logger.warn(`Record with ID ${id} not found. Delete operation skipped.`)
       throw new NotFoundException(`Record with ID ${id} not found.`)
     }
-    return await this.backofficeClient.delete({
+    return await this.dbClient.delete({
       where: {
         [this.idKey]: id,
       },

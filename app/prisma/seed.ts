@@ -5,7 +5,7 @@ const prisma = new PrismaClient()
 
 const randomObjectMockData: RandomObject[] = [
   {
-    id: 1,
+    id: '1',
     stringValue: 'Example String 1',
     intValue: 42,
     floatValue: 3.14,
@@ -15,7 +15,7 @@ const randomObjectMockData: RandomObject[] = [
     enumValue: RandomObjectEnum.KAPPA,
   },
   {
-    id: 2,
+    id: '2',
     stringValue: 'Example String 2',
     intValue: 123,
     floatValue: 2.718,
@@ -26,16 +26,18 @@ const randomObjectMockData: RandomObject[] = [
   },
 ]
 
-async function insertMockedData() {
+async function insertRandomObjectMockedData() {
   await Promise.all(
     randomObjectMockData.map((mockData: RandomObject) => {
-      return prisma.randomObject.create({ data: mockData as Prisma.RandomObjectCreateInput })
+      return prisma.randomObject.create({
+        data: mockData as Prisma.RandomObjectCreateInput,
+      })
     })
   )
 }
 
 async function main() {
-  insertMockedData().then(async () => {
+  insertRandomObjectMockedData().then(async () => {
     await prisma.$disconnect()
   }).catch(async (e) => {
     Logger.error(e)
