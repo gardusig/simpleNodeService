@@ -144,6 +144,32 @@ $ cd app
 $ npm run test
 ```
 
+## Script
+
+### Cleanup
+
+```bash
+$ ./script/cleanup.sh
+```
+
+### Lint
+
+```bash
+$ ./script/lint.sh
+```
+
+### Start
+
+```bash
+$ ./script/start.sh
+```
+
+### Test
+
+```bash
+$ ./script/start.sh
+```
+
 ### Pipeline
 
 In order to replicate the pipeline, you can run these commands:
@@ -158,12 +184,6 @@ $ ./script/pipeline/run.sh cleanup
 
 ```bash
 $ ./script/pipeline/run.sh lint
-```
-
-#### Start
-
-```bash
-$ ./script/pipeline/run.sh start
 ```
 
 #### Test
