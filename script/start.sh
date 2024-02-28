@@ -8,8 +8,7 @@ cleanup_containers() {
 
 build_images() {
     echo "start building images..."
-    # docker-compose build -q
-    docker-compose build
+    docker-compose build -q
     echo "done building images"
 }
 
