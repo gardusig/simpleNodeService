@@ -1,7 +1,7 @@
 FROM alpine:latest AS base
 RUN apk add git docker docker-compose
-COPY ./ /backoffice
-WORKDIR /backoffice
+COPY ./ /repo
+WORKDIR /repo
 ENTRYPOINT ["/bin/sh", "-c"]
 
 FROM base AS cleanup

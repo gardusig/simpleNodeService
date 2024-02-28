@@ -82,7 +82,7 @@ The database will be listening for the `${DB_INTERNAL_PORT}` within the containe
 
 | NAME            | IMAGE    | COMMAND              | SERVICE | CREATED    | STATUS       | PORTS                  |
 | --------------- | -------- | -------------------- | ------- | ---------- | ------------ | ---------------------- |
-| backoffice-db-1 | postgres | docker-entrypoint.s… | db      | 4 days ago | Up 4 minutes | 0.0.0.0:2345->5432/tcp |
+| nodenestjs-db-1 | postgres | docker-entrypoint.s… | db      | 4 days ago | Up 4 minutes | 0.0.0.0:2345->5432/tcp |
 
 
 ### Start Server Locally
@@ -97,7 +97,7 @@ The server will be listening for the `${SERVER_INTERNAL_PORT}` within the contai
 
 | NAME                | IMAGE             | COMMAND              | SERVICE | CREATED       | STATUS      | PORTS                            |
 | ------------------- | ----------------- | -------------------- | ------- | ------------- | ----------- | -------------------------------- |
-| backoffice-server-1 | backoffice-server | docker-entrypoint.s… | server  | 2 seconds ago | Up 1 second | 3000/tcp, 0.0.0.0:3000->6969/tcp |
+| nodenestjs-server-1 | nodenestjs-server | docker-entrypoint.s… | server  | 2 seconds ago | Up 1 second | 3000/tcp, 0.0.0.0:3000->6969/tcp |
 
 Once the server is running, you can access the Swagger documentation by navigating to `http://localhost:3000/docs` in your web browser.
 
