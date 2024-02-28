@@ -108,20 +108,19 @@ function removeNullProperties(obj: any): any {
 }
 
 function convertPropertiesToString(expectedOutputData: any): any {
-    return Object.entries(expectedOutputData).reduce((newData: any, [key, value]) => {
+    const newData: any = {}
+    for (const [key, value] of Object.entries(expectedOutputData)) {
         if (value instanceof Decimal) {
             newData[key] = value.toString()
-        } else if (typeof value === 'number') {
-            newData[key] = String(value)
-        } else if (Array.isArray(value)) {
-            newData[key] = value.map((item: any) =>
-                typeof item === 'number' ? String(item) : item
-            )
+        } else if (value instanceof Date) {
+            newData[key] = value.toISOString()
+        } else if (typeof value === 'object' && value !== null) {
+            newData[key] = convertPropertiesToString(value)
         } else {
             newData[key] = value
         }
-        return newData
-    }, {})
+    }
+    return newData
 }
 
 function getIdFromInputData(idKey: string, inputData: any): string {
