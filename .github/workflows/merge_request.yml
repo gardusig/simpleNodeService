@@ -12,6 +12,6 @@ jobs:
             - name: Setup Docker
               uses: docker/setup-buildx-action@v1
             - name: Lint
-              run: ./script/pipeline.sh lint
+              run: ./script/pipeline/run.sh lint
             - name: Test
-              run: ./script/pipeline.sh test
+              run: ./script/pipeline/run.sh test
