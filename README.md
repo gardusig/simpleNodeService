@@ -5,7 +5,8 @@ Node.js project designed for building scalable and modular server-side applicati
 1. [Local Development](#local-development)
 2. [Docker usage](#docker-usage)
 3. [End to end integration tests](#end-to-end-integration-tests)
-4. [Database Management](#database-management)
+4. [Script](#script)
+5. [Database Management](#database-management)
 
 ## Local Development
 
