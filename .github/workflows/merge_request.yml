@@ -1,0 +1,17 @@
+name: Build and Test
+
+on:
+    pull_request
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+            - name: Setup Docker
+              uses: docker/setup-buildx-action@v1
+            - name: Lint
+              run: ./script/pipeline.sh lint
+            - name: Test
+              run: ./script/pipeline.sh test

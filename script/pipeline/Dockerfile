@@ -4,9 +4,6 @@ COPY ./ /repo
 WORKDIR /repo
 ENTRYPOINT ["/bin/sh", "-c"]
 
-FROM base AS cleanup
-CMD ["./script/cleanup.sh"]
-
 FROM base AS lint
 CMD ["./script/lint.sh"]
 

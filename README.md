@@ -168,18 +168,12 @@ $ ./script/start.sh
 ### Test
 
 ```bash
-$ ./script/start.sh
+$ ./script/test.sh
 ```
 
 ### Pipeline
 
 In order to replicate the pipeline, you can run these commands:
-
-#### Cleanup
-
-```bash
-$ ./script/pipeline/run.sh cleanup
-```
 
 #### Lint
 
