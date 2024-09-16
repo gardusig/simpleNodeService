@@ -1,3 +1,5 @@
+![design](./design.png)
+
 ## Introduction
 
 Node.js project designed for building scalable and modular server-side applications using NestJS.
