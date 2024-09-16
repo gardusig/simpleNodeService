@@ -1,14 +1,29 @@
+## Summary
+
+- [Summary](#summary)
+- [System Design](#system-design)
+- [Local Development](#local-development)
+  - [Installation](#installation)
+  - [Start Server Locally](#start-server-locally)
+  - [Lint](#lint)
+  - [Database Connection](#database-connection)
+- [Docker Usage](#docker-usage)
+  - [Build](#build)
+  - [Start Database locally](#start-database-locally)
+  - [Start Server Locally](#start-server-locally-1)
+  - [Stopping Services](#stopping-services)
+- [End to end integration tests](#end-to-end-integration-tests)
+  - [Run](#run)
+  - [Development](#development)
+- [Script](#script)
+  - [Pipeline](#pipeline)
+- [Database Management](#database-management)
+  - [Database Migrations](#database-migrations)
+    - [Running Migrations](#running-migrations)
+
+
+## System Design
 ![design](./design.png)
-
-## Introduction
-
-Node.js project designed for building scalable and modular server-side applications using NestJS.
-
-1. [Local Development](#local-development)
-2. [Docker usage](#docker-usage)
-3. [End to end integration tests](#end-to-end-integration-tests)
-4. [Script](#script)
-5. [Database Management](#database-management)
 
 ## Local Development
 
@@ -21,13 +36,6 @@ From the project's root directory, navigate to the `app/` folder and install the
 ```bash
 $ cd app
 $ npm install
-```
-
-### Build
-
-Use the following command to build the project:
-
-```bash
 $ npm run build
 ```
 
@@ -44,15 +52,8 @@ $ npm run start
 Run ESLint to lint your TypeScript code:
 
 ```bash
-$ npm run lint
-```
-
-### Format
-
-Format your code:
-
-```bash
 $ npm run format
+$ npm run lint
 ```
 
 ### Database Connection
@@ -149,27 +150,10 @@ $ npm run test
 
 ## Script
 
-### Cleanup
-
 ```bash
 $ ./script/cleanup.sh
-```
-
-### Lint
-
-```bash
 $ ./script/lint.sh
-```
-
-### Start
-
-```bash
 $ ./script/start.sh
-```
-
-### Test
-
-```bash
 $ ./script/test.sh
 ```
 
@@ -177,15 +161,8 @@ $ ./script/test.sh
 
 In order to replicate the pipeline, you can run these commands:
 
-#### Lint
-
 ```bash
 $ ./script/pipeline/run.sh lint
-```
-
-#### Test
-
-```bash
 $ ./script/pipeline/run.sh test
 ```
 
