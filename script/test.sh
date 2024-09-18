@@ -1,7 +1,7 @@
-cleanup_containers() {
-    echo "start cleaning up containers..."
+stop_containers() {
+    echo "starting to stop containers..."
     docker-compose down
-    echo "done cleaning up containers"
+    echo "done stopping containers..."
 }
 
 run_e2e_tests() {
@@ -18,7 +18,7 @@ run_e2e_tests() {
 main() {
     set -e
     run_e2e_tests
-    cleanup_containers
+    stop_containers
 }
 
 main

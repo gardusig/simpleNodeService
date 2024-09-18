@@ -1,19 +1,19 @@
 SERVER_LIST="server_0 server_1 server_2"
 
-cleanup_containers() {
-    echo "start cleaning up containers..."
+stop_containers() {
+    echo "starting to stop containers..."
     docker-compose down
-    echo "done cleaning up containers"
+    echo "done stopping containers..."
 }
 
 build_images() {
-    echo "start building images..."
+    echo "starting  to build images..."
     docker-compose build -q
     echo "done building images"
 }
 
 start_database() {
-    echo "start setting up database container..."
+    echo "starting to set up database container..."
     docker-compose up -d --force-recreate db
     sleep 5
     if ! docker-compose ps | grep -q "db"; then
@@ -25,7 +25,7 @@ start_database() {
 }
 
 start_servers() {
-    echo "start setting up server container(s)..."
+    echo "starting to set up server container(s)..."
     for server in $SERVER_LIST; do
         echo "start setting up container: ${server}..."
         docker-compose up -d --force-recreate $server
@@ -56,7 +56,7 @@ start_nginx() {
 
 main() {
     set -e
-    cleanup_containers
+    stop_containers
     build_images
     start_database
     start_servers

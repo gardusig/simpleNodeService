@@ -1,7 +1,7 @@
-cleanup_containers() {
-    echo "start cleaning up containers..."
+stop_containers() {
+    echo "starting to stop containers..."
     docker-compose down
-    echo "done cleaning up containers"
+    echo "done stopping containers..."
 }
 
 build_images() {
@@ -18,10 +18,10 @@ run_lint() {
 
 main() {
     set -e
-    cleanup_containers
+    stop_containers
     build_images
     run_lint
-    cleanup_containers
+    stop_containers
 }
 
 main
