@@ -2,6 +2,7 @@
 
 - [Summary](#summary)
 - [System Design](#system-design)
+- [Swagger UI APIs](#swagger-ui-apis)
 - [Local Development](#local-development)
   - [Installation](#installation)
   - [Start Server Locally](#start-server-locally)
@@ -21,9 +22,12 @@
   - [Database Migrations](#database-migrations)
     - [Running Migrations](#running-migrations)
 
-
 ## System Design
-![design](./design.png)
+![system-design](./images/system-design.png)
+
+## Swagger UI APIs
+![system-design](./images/swagger-ui.png)
+
 
 ## Local Development
 
@@ -151,7 +155,6 @@ $ npm run test
 ## Script
 
 ```bash
-$ ./script/cleanup.sh
 $ ./script/lint.sh
 $ ./script/start.sh
 $ ./script/test.sh
