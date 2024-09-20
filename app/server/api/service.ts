@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common'
-import { GenericDatabase } from './database'
+import { GenericDatabase } from './abstract/read.database'
 
 export abstract class GenericService<T> {
   protected readonly logger = new Logger(GenericService.name)

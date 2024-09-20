@@ -1,14 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { RandomObjectReadDatabaseToken } from './database'
+import { RandomObjectDatabaseToken } from './database'
 import { RandomObject } from '@prisma/client'
 import { GenericService } from '../../server/api/service'
 import { GenericDatabase } from '../../server/api/abstract/write.database'
 
-export const RandomObjectReadServiceToken = 'RandomObjectReadService'
+export const RandomObjectServiceToken = 'RandomObjectService'
 
 @Injectable()
-export class RandomObjectReadService extends GenericService<RandomObject> {
-  constructor(@Inject(RandomObjectReadDatabaseToken) database: GenericDatabase<RandomObject>) {
+export class RandomObjectService extends GenericService<RandomObject> {
+  constructor(@Inject(RandomObjectDatabaseToken) database: GenericDatabase<RandomObject>) {
     super(database)
   }
 

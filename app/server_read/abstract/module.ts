@@ -1,7 +1,7 @@
-import { GenericController } from './abstract/read.controller'
-import { GenericDatabase } from './abstract/read.database'
+import { GenericController } from '../../server/api/abstract/read.controller'
+import { GenericDatabase } from '../../server/api/abstract/read.database'
 import { DynamicModule, InjectionToken, Provider, Type } from '@nestjs/common'
-import { GenericService } from './service'
+import { GenericService } from '../../server/api/service'
 import { RandomObjectPrismaClient } from '../prisma_client/client'
 
 interface GenericModuleOptions<T> {

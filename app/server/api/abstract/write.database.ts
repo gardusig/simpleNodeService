@@ -1,21 +1,20 @@
 import { Logger } from '@nestjs/common'
 import { NotFoundException, ConflictException } from '@nestjs/common'
 
-interface DatabaseMethods {
+interface WriteDatabaseMethods {
   findUnique: (params: any) => Promise<any>;
-  findMany: () => Promise<any[]>;
   create: (params: any) => Promise<any>;
   update: (params: any) => Promise<any>;
   delete: (params: any) => Promise<any>;
 }
 
-export abstract class GenericDatabase<T> {
-  protected readonly logger = new Logger(GenericDatabase.name)
+export abstract class AbstractWriteDatabase<T> {
+  protected readonly logger = new Logger(AbstractWriteDatabase.name)
 
-  protected readonly dbClient: DatabaseMethods
+  protected readonly dbClient: WriteDatabaseMethods
   protected readonly idKey: string
 
-  constructor(dbClient: DatabaseMethods, idKey: string) {
+  constructor(dbClient: WriteDatabaseMethods, idKey: string) {
     if (!dbClient) {
       this.logger.error('Prisma database client is undefined in GenericDatabase constructor.')
     }
@@ -24,23 +23,6 @@ export abstract class GenericDatabase<T> {
     }
     this.dbClient = dbClient
     this.idKey = idKey
-  }
-
-  async findById(id: string): Promise<T> {
-    const existingRecord = await this.dbClient.findUnique({
-      where: {
-        [this.idKey]: id,
-      },
-    })
-    if (!existingRecord) {
-      this.logger.warn(`Record with ID ${id} not found. Update operation skipped.`)
-      throw new NotFoundException(`Record with ID ${id} not found.`)
-    }
-    return existingRecord
-  }
-
-  async findAll(): Promise<T[]> {
-    return await this.dbClient.findMany()
   }
 
   async create(data: T, id: string): Promise<T> {

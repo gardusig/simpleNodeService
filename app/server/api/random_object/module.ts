@@ -1,22 +1,22 @@
 import { Module } from '@nestjs/common'
 import { RandomObjectController } from './controller'
-import { RandomObjectService, RandomObjectServiceToken } from './service'
-import { GenericModule } from '../abstract/module'
+import { RandomObjectReadService, RandomObjectReadServiceToken } from './service'
 import {
-  RandomObjectDatabasePostgresImplementation,
-  RandomObjectDatabaseToken,
+  RandomObjectReadDatabaseToken,
+  RandomObjectReadDatabase,
 } from './database'
 import { RandomObject } from '@prisma/client'
+import { GenericModule } from '../../server/api/module'
 
 @Module({
   imports: [
     GenericModule.configure<RandomObject>({
       controller: RandomObjectController,
-      service: RandomObjectService,
-      serviceToken: RandomObjectServiceToken,
-      dbImplementation: RandomObjectDatabasePostgresImplementation,
-      dbToken: RandomObjectDatabaseToken,
+      service: RandomObjectReadService,
+      serviceToken: RandomObjectReadServiceToken,
+      dbImplementation: RandomObjectReadDatabase,
+      dbToken: RandomObjectReadDatabaseToken,
     }),
   ],
 })
-export class RandomObjectModule { }
+export class RandomObjectReadModule { }
