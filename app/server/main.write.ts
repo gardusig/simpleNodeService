@@ -27,9 +27,10 @@ async function bootstrap() {
     logger: ['verbose'],
   })
   app.setGlobalPrefix('api')
+  app.enableCors()
   configureSwagger(app)
   const configService = app.get(ConfigService)
-  const port = configService.get<number>('PORT', 3000)
+  const port = configService.get<number>('SERVER_WRITE_PORT', 3000)
   await app.listen(port)
 }
 

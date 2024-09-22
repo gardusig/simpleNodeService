@@ -21,6 +21,7 @@ import {
   ApiParam,
 } from '@nestjs/swagger'
 import { RandomObjectDto } from './dto.random_object'
+import { ApiAuthHeaders } from '../abstract/abstract.controller'
 
 @ApiTags('RandomObject')
 @Controller('random_object')
@@ -32,6 +33,7 @@ export class RandomObjectWriteController extends AbstractWriteController<RandomO
   }
 
   @ApiOperation({ summary: 'Create a new RandomObject' })
+  @ApiAuthHeaders()
   @ApiResponse({
     status: 201,
     description: 'RandomObject created successfully',
@@ -48,6 +50,7 @@ export class RandomObjectWriteController extends AbstractWriteController<RandomO
   }
 
   @ApiOperation({ summary: 'Update an existing RandomObject by ID' })
+  @ApiAuthHeaders()
   @ApiResponse({
     status: 200,
     description: 'RandomObject updated successfully',
@@ -72,6 +75,7 @@ export class RandomObjectWriteController extends AbstractWriteController<RandomO
   }
 
   @ApiOperation({ summary: 'Delete a RandomObject by ID' })
+  @ApiAuthHeaders()
   @ApiResponse({
     status: 200,
     description: 'RandomObject deleted successfully',

@@ -4,9 +4,26 @@ import {
   HttpStatus,
   NotFoundException,
   ConflictException,
+  applyDecorators,
 } from '@nestjs/common'
+import { ApiHeader } from '@nestjs/swagger'
 
 const knownExceptions = new Set([NotFoundException, ConflictException])
+
+export function ApiAuthHeaders() {
+  return applyDecorators(
+    ApiHeader({
+      name: 'username',
+      description: 'Username for authentication',
+      required: true,
+    }),
+    ApiHeader({
+      name: 'password',
+      description: 'Password for authentication',
+      required: true,
+    })
+  )
+}
 
 export abstract class AbstractController {
   protected readonly logger = new Logger(AbstractController.name)
