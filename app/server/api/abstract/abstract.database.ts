@@ -1,5 +1,5 @@
-import { Logger } from '@nestjs/common'
 import { NotFoundException, ConflictException } from '@nestjs/common'
+import { Logger } from '@nestjs/common'
 
 interface DatabaseMethods {
   findUnique: (params: any) => Promise<any>;
@@ -9,18 +9,22 @@ interface DatabaseMethods {
   delete: (params: any) => Promise<any>;
 }
 
-export abstract class GenericDatabase<T> {
-  protected readonly logger = new Logger(GenericDatabase.name)
+export abstract class AbstractDatabase<T> {
+  protected readonly logger = new Logger(AbstractDatabase.name)
 
   protected readonly dbClient: DatabaseMethods
   protected readonly idKey: string
 
   constructor(dbClient: DatabaseMethods, idKey: string) {
     if (!dbClient) {
-      this.logger.error('Prisma database client is undefined in GenericDatabase constructor.')
+      throw new Error(
+        'Prisma database client is undefined in AbstractReadDatabase constructor.'
+      )
     }
     if (!idKey) {
-      this.logger.error('ID key is undefined in GenericDatabase constructor.')
+      throw new Error(
+        'ID key is undefined in AbstractReadDatabase constructor.'
+      )
     }
     this.dbClient = dbClient
     this.idKey = idKey
@@ -33,7 +37,6 @@ export abstract class GenericDatabase<T> {
       },
     })
     if (!existingRecord) {
-      this.logger.warn(`Record with ID ${id} not found. Update operation skipped.`)
       throw new NotFoundException(`Record with ID ${id} not found.`)
     }
     return existingRecord
@@ -44,7 +47,6 @@ export abstract class GenericDatabase<T> {
   }
 
   async create(data: T, id: string): Promise<T> {
-    this.logger.debug(`Creating record with ID ${id}...`)
     const existingRecord = await this.dbClient.findUnique({
       where: {
         [this.idKey]: id,
