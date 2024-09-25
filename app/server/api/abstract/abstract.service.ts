@@ -1,12 +1,13 @@
-import { Logger } from '@nestjs/common'
-import { AbstractDatabase } from './abstract.database'
+import { Logger } from "@nestjs/common";
+
+import { AbstractDatabase } from "./abstract.database";
 
 export abstract class AbstractService<T> {
-  protected readonly logger = new Logger(AbstractService.name)
-  protected readonly database: AbstractDatabase<T>
+  protected readonly logger = new Logger(AbstractService.name);
+  protected readonly database: AbstractDatabase<T>;
 
   constructor(database: AbstractDatabase<T>) {
-    this.database = database
+    this.database = database;
   }
 
   abstract findById(id: string): Promise<T>;

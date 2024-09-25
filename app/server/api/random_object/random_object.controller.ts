@@ -1,111 +1,121 @@
-import { Body, Controller, Delete, Inject, Post, Put } from '@nestjs/common'
-import { Param, Get } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger'
-import { AbstractController, ApiAuthHeaders } from '../abstract/abstract.controller'
-import { RandomObjectDto } from './random_object.dto'
-import { RandomObjectServiceToken } from './random_object.service'
-import { RandomObject } from '@prisma/client'
-import { AbstractService } from '../abstract/abstract.service'
+import { Body, Controller, Delete, Inject, Post, Put } from "@nestjs/common";
+import { Param, Get } from "@nestjs/common";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBody,
+} from "@nestjs/swagger";
+import { RandomObject } from "@prisma/client";
 
-@ApiTags('random_object')
-@Controller('random_object')
+import {
+  AbstractController,
+  ApiAuthHeaders,
+} from "../abstract/abstract.controller";
+import { AbstractService } from "../abstract/abstract.service";
+import { RandomObjectDto } from "./random_object.dto";
+import { RandomObjectServiceToken } from "./random_object.service";
+
+@ApiTags("random_object")
+@Controller("random_object")
 export class RandomObjectController extends AbstractController<RandomObject> {
   constructor(
-    @Inject(RandomObjectServiceToken) service: AbstractService<RandomObject>
+    @Inject(RandomObjectServiceToken) service: AbstractService<RandomObject>,
   ) {
-    super(service)
+    super(service);
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Retrieve a RandomObject by ID' })
+  @Get(":id")
+  @ApiOperation({ summary: "Retrieve a RandomObject by ID" })
   @ApiAuthHeaders()
   @ApiResponse({
     status: 200,
-    description: 'The found RandomObject',
+    description: "The found RandomObject",
     type: RandomObjectDto,
   })
-  @ApiResponse({ status: 404, description: 'RandomObject not found' })
-  async findById(@Param('id') id: string): Promise<RandomObject> {
+  @ApiResponse({ status: 404, description: "RandomObject not found" })
+  async findById(@Param("id") id: string): Promise<RandomObject> {
     try {
-      return await this.service.findById(id)
+      return await this.service.findById(id);
     } catch (error: any) {
-      throw this.handleHttpException(error)
+      throw this.handleHttpException(error);
     }
   }
 
   @Get()
-  @ApiOperation({ summary: 'Retrieve all RandomObjects' })
+  @ApiOperation({ summary: "Retrieve all RandomObjects" })
   @ApiAuthHeaders()
   @ApiResponse({
     status: 200,
-    description: 'List of RandomObjects',
+    description: "List of RandomObjects",
     type: [RandomObjectDto],
   })
   async findAll(): Promise<RandomObject[]> {
     try {
-      return await this.service.findAll()
+      return await this.service.findAll();
     } catch (error: any) {
-      throw this.handleHttpException(error)
+      throw this.handleHttpException(error);
     }
   }
 
-  @ApiOperation({ summary: 'Create a new RandomObject' })
+  @ApiOperation({ summary: "Create a new RandomObject" })
   @ApiAuthHeaders()
   @ApiResponse({
     status: 201,
-    description: 'RandomObject created successfully',
+    description: "RandomObject created successfully",
     type: RandomObjectDto,
   })
-  @ApiResponse({ status: 400, description: 'Invalid input' })
+  @ApiResponse({ status: 400, description: "Invalid input" })
   @ApiBody({
     type: RandomObjectDto,
-    description: 'The RandomObject entity to create',
+    description: "The RandomObject entity to create",
   })
   @Post()
   create(@Body() entity: RandomObject): Promise<RandomObject> {
-    return this.service.create(entity)
+    return this.service.create(entity);
   }
 
-  @ApiOperation({ summary: 'Update an existing RandomObject by ID' })
+  @ApiOperation({ summary: "Update an existing RandomObject by ID" })
   @ApiAuthHeaders()
   @ApiResponse({
     status: 200,
-    description: 'RandomObject updated successfully',
+    description: "RandomObject updated successfully",
     type: RandomObjectDto,
   })
-  @ApiResponse({ status: 404, description: 'RandomObject not found' })
+  @ApiResponse({ status: 404, description: "RandomObject not found" })
   @ApiParam({
-    name: 'id',
+    name: "id",
     type: String,
-    description: 'The ID of the RandomObject to update',
+    description: "The ID of the RandomObject to update",
   })
   @ApiBody({
     type: RandomObjectDto,
-    description: 'The updated RandomObject entity',
+    description: "The updated RandomObject entity",
   })
-  @Put(':id')
+  @Put(":id")
   update(
-    @Param('id') id: string,
-    @Body() entity: RandomObject
+    @Param("id") id: string,
+    @Body() entity: RandomObject,
   ): Promise<RandomObject> {
-    return this.service.update(id, entity)
+    return this.service.update(id, entity);
   }
 
-  @ApiOperation({ summary: 'Delete a RandomObject by ID' })
+  @ApiOperation({ summary: "Delete a RandomObject by ID" })
   @ApiAuthHeaders()
   @ApiResponse({
     status: 200,
-    description: 'RandomObject deleted successfully',
+    description: "RandomObject deleted successfully",
     type: RandomObjectDto,
   })
-  @ApiResponse({ status: 404, description: 'RandomObject not found' })
+  @ApiResponse({ status: 404, description: "RandomObject not found" })
   @ApiParam({
-    name: 'id',
+    name: "id",
     type: String,
-    description: 'The ID of the RandomObject to delete',
+    description: "The ID of the RandomObject to delete",
   })
-  @Delete(':id')
-  delete(@Param('id') id: string): Promise<RandomObject> {
-    return this.service.delete(id)
+  @Delete(":id")
+  delete(@Param("id") id: string): Promise<RandomObject> {
+    return this.service.delete(id);
   }
 }
