@@ -1,4 +1,4 @@
-import { DynamicModule, InjectionToken, Type } from '@nestjs/common'
+import { DynamicModule, InjectionToken, Type } from "@nestjs/common";
 
 interface GenericModuleOptions {
   controller: Type<any>;
@@ -24,6 +24,6 @@ export class AbstractModule {
         },
       ],
       exports: [options.serviceToken, options.dbToken],
-    }
+    };
   }
 }

@@ -1,7 +1,7 @@
-import { AbstractClient } from '../abstract/client'
+import { AbstractClient } from "../abstract/client";
 
 export class RandomObjectClient extends AbstractClient {
   constructor() {
-    super('random_object')
+    super("random_object");
   }
 }

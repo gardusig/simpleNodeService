@@ -1,8 +1,15 @@
-import { Module } from '@nestjs/common'
-import { AbstractModule } from '../abstract/abstract.module'
-import { RandomObjectController } from './random_object.controller'
-import { RandomObjectService, RandomObjectServiceToken } from './random_object.service'
-import { RandomObjectDatabase, RandomObjectDatabaseToken } from './random_object.database'
+import { Module } from "@nestjs/common";
+
+import { AbstractModule } from "../abstract/abstract.module";
+import { RandomObjectController } from "./random_object.controller";
+import {
+  RandomObjectDatabase,
+  RandomObjectDatabaseToken,
+} from "./random_object.database";
+import {
+  RandomObjectService,
+  RandomObjectServiceToken,
+} from "./random_object.service";
 
 @Module({
   imports: [

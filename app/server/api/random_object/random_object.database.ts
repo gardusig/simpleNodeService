@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common'
-import { PrismaClient, RandomObject } from '@prisma/client'
-import { AbstractDatabase } from '../abstract/abstract.database'
+import { Injectable } from "@nestjs/common";
+import { PrismaClient, RandomObject } from "@prisma/client";
 
-export const RandomObjectDatabaseToken = 'RandomObjectDatabase'
+import { AbstractDatabase } from "../abstract/abstract.database";
+
+export const RandomObjectDatabaseToken = "RandomObjectDatabase";
 
 @Injectable()
 export class RandomObjectDatabase extends AbstractDatabase<RandomObject> {
   constructor() {
-    super(new PrismaClient().randomObject, 'id')
+    super(new PrismaClient().randomObject, "id");
   }
 }
