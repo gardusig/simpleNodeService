@@ -3,10 +3,10 @@ import { ConfigService } from "@nestjs/config";
 import { ConfigModule } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 
-import { RandomObjectModule } from "./api/random_object/random_object.module";
-import { configureSwagger } from "./docs/swagger";
-import { HealthModule } from "./health/module";
-import { AuthMiddleware } from "./middleware/authentication";
+import { RandomObjectModule } from "../shared/server/api/random_object/random_object.module";
+import { configureSwagger } from "../shared/server/docs/swagger";
+import { HealthModule } from "../shared/server/health/module";
+import { AuthMiddleware } from "../shared/server/middleware/authentication";
 
 @Module({
   imports: [

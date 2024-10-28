@@ -8,7 +8,7 @@ import {
 } from "@nestjs/common";
 import { ApiHeader } from "@nestjs/swagger";
 
-import { AbstractService } from "./abstract.service";
+import { AbstractService } from "./abstract/abstract.service";
 
 const knownExceptions = new Set([NotFoundException, ConflictException]);
 
