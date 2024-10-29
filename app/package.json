@@ -3,8 +3,8 @@
     "license": "MIT",
     "scripts": {
         "build": "nest build",
-        "start:random-object-service": "node dist/random_object_service/server/random_object.main.js",
-        "test": "jest",
+        "start:random-object-service": "npm run prisma:start && node dist/random_object_service/server/random_object.main.js",
+        "test": "npm run prisma:test && jest",
         "test:coverage": "jest --coverage",
         "lint": "eslint './**/*.ts'",
         "format": "eslint './**/*.ts' --fix",
@@ -12,7 +12,8 @@
         "prisma:generate": "npx prisma generate --schema ./prisma/database/schema.prisma",
         "prisma:migrate": "npx prisma migrate dev --schema ./prisma/database/schema.prisma --name migration --skip-seed",
         "prisma:reset": "npx prisma migrate reset --schema ./prisma/database/schema.prisma --force --skip-seed",
-        "prisma:start": "npm run prisma:deploy && npm run prisma:generate"
+        "prisma:start": "npm run prisma:deploy && npm run prisma:generate",
+        "prisma:test": "npm run prisma:reset && npm run prisma:migrate"
     },
     "testRegex": ".*\\.spec\\.ts$",
     "testEnvironment": "node",
