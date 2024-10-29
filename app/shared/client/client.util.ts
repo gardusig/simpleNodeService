@@ -1,10 +1,14 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
 import axiosRetry from "axios-retry";
+import { Agent } from "https";
 
 export function createAxiosInstance(baseURL: string): AxiosInstance {
   const axiosInstance = axios.create({
     baseURL: `${baseURL}`,
     timeout: 5 * 1000,
+    httpsAgent: new Agent({
+      rejectUnauthorized: false,
+    }),
   });
   setupRetryLogic(axiosInstance);
   return axiosInstance;

@@ -74,6 +74,7 @@ services:
       - HOST=nginx
       - PORT=443
       - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?schema=public&connect_timeout=${DB_CONNECTION_TIMEOUT}
+      - API_BASE_URL=https://nginx:443/api
     networks:
       - random_network
 

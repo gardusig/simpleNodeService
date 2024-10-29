@@ -6,9 +6,13 @@ import {
   UpdateRandomObjectRequest,
 } from "../dto/random_object.request.dto";
 
+const apiBaseUrl = process.env.API_BASE_URL || "http://localhost:3000/api";
+
+console.log(`apiBaseUrl: ${apiBaseUrl}`);
+
 const authenticationClient = new AuthenticationClient();
 const randomObjectServiceClient = new RandomObjectServiceClient(
-  "http://localhost:3000/api",
+  apiBaseUrl,
 ).withAuthenticationClient(authenticationClient);
 
 const createRandomObjectRequest = new CreateRandomObjectRequest(
