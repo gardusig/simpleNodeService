@@ -4,5 +4,4 @@ WORKDIR /app
 RUN npm install
 RUN npm run prisma:generate
 RUN npm run build
-RUN npm install --production
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start:random-object-service"]

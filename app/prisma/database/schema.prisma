@@ -1,0 +1,25 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x", "linux-musl-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RandomObjectEnum {
+  KAPPA
+  KEEPO
+}
+
+model RandomObject {
+  id           String  @id @default(uuid())
+  stringValue  String
+  intValue     Int
+  floatValue   Float
+  booleanValue Boolean
+  dateTimeValue DateTime
+  jsonValue    Json
+  enumValue    RandomObjectEnum
+}
