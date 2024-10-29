@@ -3,7 +3,7 @@ import { ConfigModule } from "@nestjs/config";
 
 export function createModule(
   modules: Type<any>[],
-  settings: Record<string, any>
+  settings: Record<string, any>,
 ): ModuleMetadata {
   return {
     imports: [

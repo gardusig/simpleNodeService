@@ -1,14 +1,21 @@
-import { AbstractApiClient } from "../../shared/client/client.abstract";
-import { CreateUserRequest, UpdateUserRequest } from "../dto/random_object.request.dto";
-import { UserListResponse, UserResponse } from "../dto/random_object.response.dto";
+import {
+  CreateRandomObjectRequest,
+  UpdateRandomObjectRequest,
+} from "random_object_service/dto/random_object.request.dto";
+import {
+  RandomObjectListResponse,
+  RandomObjectResponse,
+} from "random_object_service/dto/random_object.response.dto";
 
-export class UserServiceClient extends AbstractApiClient<
-  CreateUserRequest,
-  UpdateUserRequest,
-  UserResponse,
-  UserListResponse
+import { AbstractApiClient } from "../../shared/client/client.abstract";
+
+export class RandomObjectServiceClient extends AbstractApiClient<
+  CreateRandomObjectRequest,
+  UpdateRandomObjectRequest,
+  RandomObjectResponse,
+  RandomObjectListResponse
 > {
   constructor(baseUrl: string) {
-    super(baseUrl, "user");
+    super(baseUrl, "random_object");
   }
 }

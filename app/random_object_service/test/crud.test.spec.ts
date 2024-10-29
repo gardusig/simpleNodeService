@@ -1,74 +1,96 @@
 import { AuthenticationClient } from "../../shared/client/client.authentication";
-import { UserServiceClient } from "../client/user.client";
-import { CreateUserRequest, UpdateUserRequest } from "../dto/user.request.dto";
-
-const baseUrl = "http://localhost:3000/api";
+import { RandomObjectServiceClient } from "../client/random_object.client";
+import { RandomObjectEnum } from "../dto/random_object.enum.dto";
+import {
+  CreateRandomObjectRequest,
+  UpdateRandomObjectRequest,
+} from "../dto/random_object.request.dto";
 
 const authenticationClient = new AuthenticationClient();
-const userServiceClient = new UserServiceClient(
-  baseUrl,
+const randomObjectServiceClient = new RandomObjectServiceClient(
+  "http://localhost:3000/api",
 ).withAuthenticationClient(authenticationClient);
 
-const createUserRequest = new CreateUserRequest(
-  "mail@example.com",
-  "password123",
+const createRandomObjectRequest = new CreateRandomObjectRequest(
+  "Example String",
+  42,
+  3.14,
+  true,
+  "2024-01-01T00:00:00Z",
+  { key: "value" },
+  RandomObjectEnum.KAPPA,
 );
 
-const updateUserRequest = new UpdateUserRequest(
-  "updated.mail@example.com",
-  "password456",
+const updateRandomObjectRequest = new UpdateRandomObjectRequest(
+  "Updated String",
+  100,
+  9.99,
+  false,
+  "2024-05-05T12:00:00Z",
+  { updatedKey: "newValue" },
+  RandomObjectEnum.KEEPO,
 );
 
-describe("UserServiceClient CRUD operations", () => {
-  let userId: string;
+describe("RandomObjectServiceClient CRUD operations", () => {
+  let randomObjectId: string;
 
-  test("should delete all users", async () => {
-    await deleteAllUsers();
+  test("should delete all randomObjects", async () => {
+    await deleteAllRandomObjects();
   });
 
-  test("should create a new user", async () => {
-    const createUserResponse =
-      await userServiceClient.create(createUserRequest);
-    expect(createUserResponse.error).toBeUndefined();
-    expect(createUserResponse.data).not.toBeNull();
-    expect(createUserResponse.data?.email).toEqual(createUserRequest.email);
-    userId = createUserResponse.data!.id;
+  test("should create a new randomObject", async () => {
+    const createRandomObjectResponse = await randomObjectServiceClient.create(
+      createRandomObjectRequest,
+    );
+    expect(createRandomObjectResponse.error).toBeUndefined();
+    expect(createRandomObjectResponse.data).not.toBeNull();
+    expect(createRandomObjectResponse.data?.intValue).toEqual(
+      createRandomObjectRequest.intValue,
+    );
+    randomObjectId = createRandomObjectResponse.data!.id;
   });
 
-  test("should find created user", async () => {
-    const findByResponse = await userServiceClient.findById(userId);
+  test("should find created randomObject", async () => {
+    const findByResponse =
+      await randomObjectServiceClient.findById(randomObjectId);
     expect(findByResponse.error).toBeUndefined();
     expect(findByResponse.data).not.toBeNull();
-    expect(findByResponse.data?.email).toEqual(createUserRequest.email);
-  });
-
-  test("should update a user", async () => {
-    const updateUserResponse = await userServiceClient.update(
-      userId,
-      updateUserRequest,
+    expect(findByResponse.data?.intValue).toEqual(
+      createRandomObjectRequest.intValue,
     );
-    expect(updateUserResponse.error).toBeUndefined();
-    expect(updateUserResponse.data).not.toBeNull();
-    expect(updateUserResponse.data?.email).toEqual(updateUserRequest.email);
   });
 
-  test("should delete all users", async () => {
-    await deleteAllUsers();
+  test("should update a randomObject", async () => {
+    const updateRandomObjectResponse = await randomObjectServiceClient.update(
+      randomObjectId,
+      updateRandomObjectRequest,
+    );
+    expect(updateRandomObjectResponse.error).toBeUndefined();
+    expect(updateRandomObjectResponse.data).not.toBeNull();
+    expect(updateRandomObjectResponse.data?.intValue).toEqual(
+      updateRandomObjectRequest.intValue,
+    );
+  });
+
+  test("should delete all randomObjects", async () => {
+    await deleteAllRandomObjects();
   });
 });
 
-async function deleteAllUsers() {
-  let findAllResponse = await userServiceClient.findAll();
+async function deleteAllRandomObjects() {
+  let findAllResponse = await randomObjectServiceClient.findAll();
   expect(findAllResponse.error).toBeUndefined();
   expect(findAllResponse.data).not.toBeNull();
-  for (const user of findAllResponse.data!.users) {
-    const deleteResponse = await userServiceClient.remove(user.id);
+  for (const randomObject of findAllResponse.data!.objects) {
+    const deleteResponse = await randomObjectServiceClient.remove(
+      randomObject.id,
+    );
     expect(findAllResponse.error).toBeUndefined();
     expect(findAllResponse.data).not.toBeNull();
-    expect(deleteResponse.data).toEqual(user);
+    expect(deleteResponse.data).toEqual(randomObject);
   }
-  findAllResponse = await userServiceClient.findAll();
+  findAllResponse = await randomObjectServiceClient.findAll();
   expect(findAllResponse.error).toBeUndefined();
   expect(findAllResponse.data).not.toBeNull();
-  expect(findAllResponse.data?.users.length).toEqual(0);
+  expect(findAllResponse.data?.objects.length).toEqual(0);
 }

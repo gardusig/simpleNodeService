@@ -1,49 +1,57 @@
-import {
-  Logger,
-  HttpException,
-  HttpStatus,
-  NotFoundException,
-  ConflictException,
-  applyDecorators,
-} from "@nestjs/common";
-import { ApiHeader } from "@nestjs/swagger";
+import { Logger } from "@nestjs/common";
 
-import { AbstractService } from "./abstract/abstract.service";
+import { AbstractService } from "./abstract.service";
 
-const knownExceptions = new Set([NotFoundException, ConflictException]);
-
-export function ApiAuthHeaders() {
-  return applyDecorators(
-    ApiHeader({
-      name: "username",
-      description: "Username for authentication",
-      required: true,
-    }),
-    ApiHeader({
-      name: "password",
-      description: "Password for authentication",
-      required: true,
-    }),
-  );
-}
-
-export abstract class AbstractController<T> {
+export abstract class AbstractController<
+  DatabaseEntity,
+  RequestCreateUser,
+  RequestUpdateUser,
+  ResponseDto,
+  ResponseListDto,
+> {
   protected readonly logger = new Logger(AbstractController.name);
-  protected readonly service: AbstractService<T>;
+  protected readonly service: AbstractService<
+    DatabaseEntity,
+    RequestCreateUser,
+    RequestUpdateUser,
+    ResponseDto,
+    ResponseListDto
+  >;
 
-  constructor(service: AbstractService<T>) {
+  constructor(
+    service: AbstractService<
+      DatabaseEntity,
+      RequestCreateUser,
+      RequestUpdateUser,
+      ResponseDto,
+      ResponseListDto
+    >,
+  ) {
     this.service = service;
   }
 
-  protected handleHttpException(error: any): Error {
-    this.logger.error(`Error processing request: ${error.message}`);
-    this.logger.verbose(error.stack);
-    if (!knownExceptions.has(error.constructor)) {
-      throw new HttpException(
-        `Internal Server Error: ${error.constructor.name} - ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-    return error;
+  protected async findById(id: string): Promise<ResponseDto | null> {
+    return await this.service.findById(id);
+  }
+
+  protected async findAll(): Promise<ResponseListDto | null> {
+    return await this.service.findAll();
+  }
+
+  protected async create(
+    entity: RequestCreateUser,
+  ): Promise<ResponseDto | null> {
+    return await this.service.add(entity);
+  }
+
+  protected async update(
+    id: string,
+    entity: RequestUpdateUser,
+  ): Promise<ResponseDto | null> {
+    return await this.service.update(id, entity);
+  }
+
+  public async delete(id: string): Promise<ResponseDto | null> {
+    return await this.service.remove(id);
   }
 }

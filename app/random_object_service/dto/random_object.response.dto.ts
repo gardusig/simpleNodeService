@@ -1,40 +1,85 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class UserResponse {
+import { RandomObjectEnum } from "./random_object.enum.dto";
+
+export class RandomObjectResponse {
   @ApiProperty({
-    description: "The unique identifier of the User",
+    description: "The unique identifier of the RandomObject",
     type: String,
   })
   id: string;
 
-  @ApiProperty({ description: "The email address of the User", type: String })
-  email: string;
+  @ApiProperty({
+    description: "A string value of the RandomObject",
+    type: String,
+  })
+  stringValue: string;
 
   @ApiProperty({
-    description: "The date when the User was created",
-    type: Date,
+    description: "An integer value of the RandomObject",
+    type: Number,
   })
-  createdAt: Date;
+  intValue: number;
 
   @ApiProperty({
-    description: "The date when the User was last updated",
+    description: "A float value of the RandomObject",
+    type: Number,
+  })
+  floatValue: number;
+
+  @ApiProperty({
+    description: "A boolean value of the RandomObject",
+    type: Boolean,
+  })
+  booleanValue: boolean;
+
+  @ApiProperty({
+    description: "A DateTime value of the RandomObject",
     type: Date,
   })
-  updatedAt: Date;
+  dateTimeValue: Date;
 
-  constructor(id: string, email: string, createdAt: Date, updatedAt: Date) {
+  @ApiProperty({
+    description: "A JSON object value of the RandomObject",
+    type: Object,
+  })
+  jsonValue: Record<string, any>; // Use `Record<string, any>` for JSON values
+
+  @ApiProperty({
+    description: "An enum value representing the type of RandomObject",
+    enum: RandomObjectEnum,
+  })
+  enumValue: RandomObjectEnum;
+
+  constructor(
+    id: string,
+    stringValue: string,
+    intValue: number,
+    floatValue: number,
+    booleanValue: boolean,
+    dateTimeValue: Date,
+    jsonValue: Record<string, any>,
+    enumValue: RandomObjectEnum,
+  ) {
     this.id = id;
-    this.email = email;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+    this.stringValue = stringValue;
+    this.intValue = intValue;
+    this.floatValue = floatValue;
+    this.booleanValue = booleanValue;
+    this.dateTimeValue = dateTimeValue;
+    this.jsonValue = jsonValue;
+    this.enumValue = enumValue;
   }
 }
 
-export class UserListResponse {
-  @ApiProperty({ description: "List of Users", type: [UserResponse] })
-  users: UserResponse[];
+export class RandomObjectListResponse {
+  @ApiProperty({
+    description: "List of RandomObjects",
+    type: [RandomObjectResponse],
+  })
+  objects: RandomObjectResponse[];
 
-  constructor(users: UserResponse[]) {
-    this.users = users;
+  constructor(objects: RandomObjectResponse[]) {
+    this.objects = objects;
   }
 }

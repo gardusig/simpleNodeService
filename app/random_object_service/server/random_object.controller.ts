@@ -1,9 +1,13 @@
 import { Body, Param } from "@nestjs/common";
-import { User } from "@prisma/client";
+import { RandomObject } from "@prisma/client";
 import {
-  CreateUserRequest,
-  UpdateUserRequest,
-} from "user-service/dto/user.request.dto";
+  CreateRandomObjectRequest,
+  UpdateRandomObjectRequest,
+} from "random_object_service/dto/random_object.request.dto";
+import {
+  RandomObjectListResponse,
+  RandomObjectResponse,
+} from "random_object_service/dto/random_object.response.dto";
 
 import { AbstractController } from "../../shared/server/api/abstract.controller";
 import {
@@ -14,51 +18,59 @@ import {
   ApplyDecoratorsGetById,
   ApplyDecoratorsUpdate,
 } from "../../shared/server/api/abstract.decorator";
-import {
-  UserListResponse,
-  UserResponse,
-} from "../../user-service/dto/user.response.dto";
-import { UserService } from "./user.service";
+import { RandomObjectService } from "./random_object.service";
 
-@ApplyDecoratorsController("user")
-export class UserController extends AbstractController<
-  User,
-  CreateUserRequest,
-  UpdateUserRequest,
-  UserResponse,
-  UserListResponse
+@ApplyDecoratorsController("random_object")
+export class RandomObjectController extends AbstractController<
+  RandomObject,
+  CreateRandomObjectRequest,
+  UpdateRandomObjectRequest,
+  RandomObjectResponse,
+  RandomObjectListResponse
 > {
-  constructor(service: UserService) {
+  constructor(service: RandomObjectService) {
     super(service);
   }
 
-  @ApplyDecoratorsGetById("user", UserResponse)
-  public async findById(@Param("id") id: string): Promise<UserResponse | null> {
+  @ApplyDecoratorsGetById("random_object", RandomObjectResponse)
+  public async findById(
+    @Param("id") id: string,
+  ): Promise<RandomObjectResponse | null> {
     return await super.findById(id);
   }
 
-  @ApplyDecoratorsGetAll(UserListResponse)
-  public async findAll(): Promise<UserListResponse | null> {
+  @ApplyDecoratorsGetAll("random_object", RandomObjectListResponse)
+  public async findAll(): Promise<RandomObjectListResponse | null> {
     return await super.findAll();
   }
 
-  @ApplyDecoratorsCreate(UserResponse)
+  @ApplyDecoratorsCreate(
+    "random_object",
+    CreateRandomObjectRequest,
+    RandomObjectResponse,
+  )
   public async create(
-    @Body() entity: CreateUserRequest,
-  ): Promise<UserResponse | null> {
+    @Body() entity: CreateRandomObjectRequest,
+  ): Promise<RandomObjectResponse | null> {
     return await super.create(entity);
   }
 
-  @ApplyDecoratorsUpdate(UserResponse)
+  @ApplyDecoratorsUpdate(
+    "random_object",
+    UpdateRandomObjectRequest,
+    RandomObjectResponse,
+  )
   public async update(
     @Param("id") id: string,
-    @Body() entity: UpdateUserRequest,
-  ): Promise<UserResponse | null> {
+    @Body() entity: UpdateRandomObjectRequest,
+  ): Promise<RandomObjectResponse | null> {
     return await super.update(id, entity);
   }
 
-  @ApplyDecoratorsDelete(UserResponse)
-  public async delete(@Param("id") id: string): Promise<UserResponse | null> {
+  @ApplyDecoratorsDelete("random_object", RandomObjectResponse)
+  public async delete(
+    @Param("id") id: string,
+  ): Promise<RandomObjectResponse | null> {
     return await super.delete(id);
   }
 }

@@ -21,7 +21,7 @@ export function ApplyDecoratorsController(prefix: string) {
 
 export function ApplyDecoratorsDelete<ResponseDto>(
   entityName: string,
-  responseDto: new (...args: any[]) => ResponseDto
+  responseDto: new (...args: any[]) => ResponseDto,
 ) {
   return applyDecorators(
     ApiBearerAuth(),
@@ -40,13 +40,13 @@ export function ApplyDecoratorsDelete<ResponseDto>(
       name: "id",
       type: String,
       description: `The ID of the ${entityName} to delete`,
-    })
+    }),
   );
 }
 
 export function ApplyDecoratorsGetById<ResponseDto>(
   entityName: string,
-  responseDto: new (...args: any[]) => ResponseDto
+  responseDto: new (...args: any[]) => ResponseDto,
 ) {
   return applyDecorators(
     ApiBearerAuth(),
@@ -62,13 +62,13 @@ export function ApplyDecoratorsGetById<ResponseDto>(
     ApiResponse({
       status: 404,
       description: `${entityName} not found`,
-    })
+    }),
   );
 }
 
 export function ApplyDecoratorsGetAll<ResponseDto>(
   entityName: string,
-  responseDto: new (...args: any[]) => ResponseDto
+  responseDto: new (...args: any[]) => ResponseDto,
 ) {
   return applyDecorators(
     ApiBearerAuth(),
@@ -78,14 +78,14 @@ export function ApplyDecoratorsGetAll<ResponseDto>(
       status: 200,
       description: `List of ${entityName}s`,
       type: [responseDto],
-    })
+    }),
   );
 }
 
 export function ApplyDecoratorsCreate<RequestDto, ResponseDto>(
   entityName: string,
   requestDto: new (...args: any[]) => RequestDto,
-  responseDto: new (...args: any[]) => ResponseDto
+  responseDto: new (...args: any[]) => ResponseDto,
 ) {
   return applyDecorators(
     ApiBearerAuth(),
@@ -103,14 +103,14 @@ export function ApplyDecoratorsCreate<RequestDto, ResponseDto>(
     ApiBody({
       description: `The ${entityName} entity to create`,
       type: requestDto,
-    })
+    }),
   );
 }
 
 export function ApplyDecoratorsUpdate<RequestDto, ResponseDto>(
   entityName: string,
   requestDto: new (...args: any[]) => RequestDto,
-  responseDto: new (...args: any[]) => ResponseDto
+  responseDto: new (...args: any[]) => ResponseDto,
 ) {
   return applyDecorators(
     ApiBearerAuth(),
@@ -133,6 +133,6 @@ export function ApplyDecoratorsUpdate<RequestDto, ResponseDto>(
     ApiBody({
       type: requestDto,
       description: `The updated ${entityName} entity`,
-    })
+    }),
   );
 }

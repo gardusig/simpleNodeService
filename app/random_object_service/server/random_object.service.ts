@@ -1,57 +1,62 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { PrismaClient, User } from "@prisma/client";
+import { Injectable } from "@nestjs/common";
+import { PrismaClient, RandomObject } from "@prisma/client";
+import {
+  CreateRandomObjectRequest,
+  UpdateRandomObjectRequest,
+} from "random_object_service/dto/random_object.request.dto";
 import { AbstractService } from "shared/server/api/abstract.service";
-import {
-  CreateUserRequest,
-  UpdateUserRequest,
-} from "user-service/dto/user.request.dto";
 
+import { RandomObjectEnum } from "../dto/random_object.enum.dto";
 import {
-  UserListResponse,
-  UserResponse,
-} from "../../user-service/dto/user.response.dto";
+  RandomObjectListResponse,
+  RandomObjectResponse,
+} from "../dto/random_object.response.dto";
 
 @Injectable()
-export class UserService extends AbstractService<
-  User,
-  CreateUserRequest,
-  UpdateUserRequest,
-  UserResponse,
-  UserListResponse
+export class RandomObjectService extends AbstractService<
+  RandomObject,
+  CreateRandomObjectRequest,
+  UpdateRandomObjectRequest,
+  RandomObjectResponse,
+  RandomObjectListResponse
 > {
   constructor() {
-    super(new PrismaClient().user, "id");
-  }
-
-  public async findByEmail(email: string): Promise<UserResponse> {
-    const existingRecord = await this.findEntityBy("email", email);
-    if (!existingRecord) {
-      throw new NotFoundException(`Record with email ${email} not found.`);
-    }
-    return existingRecord;
+    super(new PrismaClient().randomObject, "id");
   }
 
   protected getConvertedEntity(
-    databaseEntity: User | null,
-  ): UserResponse | null {
+    databaseEntity: RandomObject | null,
+  ): RandomObjectResponse | null {
     if (!databaseEntity) {
       return null;
     }
-    return new UserResponse(
+    const jsonValue: Record<string, any> =
+      databaseEntity.jsonValue === null
+        ? {}
+        : (databaseEntity.jsonValue as Record<string, any>);
+    const enumValue: RandomObjectEnum =
+      RandomObjectEnum[
+        databaseEntity.enumValue as keyof typeof RandomObjectEnum
+      ];
+    return new RandomObjectResponse(
       databaseEntity.id,
-      databaseEntity.email,
-      databaseEntity.createdAt,
-      databaseEntity.updatedAt,
+      databaseEntity.stringValue,
+      databaseEntity.intValue,
+      databaseEntity.floatValue,
+      databaseEntity.booleanValue,
+      databaseEntity.dateTimeValue,
+      jsonValue,
+      enumValue,
     );
   }
 
   protected getConvertedEntityList(
-    databaseEntityList: User[] | null,
-  ): UserListResponse {
+    databaseEntityList: RandomObject[] | null,
+  ): RandomObjectListResponse {
     if (!databaseEntityList) {
-      return new UserListResponse([]);
+      return new RandomObjectListResponse([]);
     }
-    const convertedUsers: UserResponse[] = [];
+    const convertedRandomObjects: RandomObjectResponse[] = [];
     for (const entity of databaseEntityList) {
       const convertedEntity = this.getConvertedEntity(entity);
       if (!convertedEntity) {
@@ -60,8 +65,8 @@ export class UserService extends AbstractService<
         );
         continue;
       }
-      convertedUsers.push(convertedEntity);
+      convertedRandomObjects.push(convertedEntity);
     }
-    return new UserListResponse(convertedUsers);
+    return new RandomObjectListResponse(convertedRandomObjects);
   }
 }

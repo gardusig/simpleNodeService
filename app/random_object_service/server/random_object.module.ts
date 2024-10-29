@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
 
-import { UserController } from "./user.controller";
-import { UserService } from "./user.service";
+import { RandomObjectController } from "./random_object.controller";
+import { RandomObjectService } from "./random_object.service";
 
 @Module({
-  controllers: [UserController],
-  providers: [UserService],
+  controllers: [RandomObjectController],
+  providers: [RandomObjectService],
 })
-export class UserModule {}
+export class RandomObjectModule {}

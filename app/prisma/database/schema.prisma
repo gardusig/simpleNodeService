@@ -8,18 +8,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model RandomObject {
-  id              String      @id
-  stringValue     String
-  intValue        Int
-  floatValue      Float
-  booleanValue    Boolean
-  dateTimeValue   DateTime
-  jsonValue       Json
-  enumValue       RandomObjectEnum
-}
-
 enum RandomObjectEnum {
   KAPPA
   KEEPO
+}
+
+model RandomObject {
+  id           String  @id @default(uuid())
+  stringValue  String
+  intValue     Int
+  floatValue   Float
+  booleanValue Boolean
+  dateTimeValue DateTime
+  jsonValue    Json
+  enumValue    RandomObjectEnum
 }
