@@ -8,8 +8,6 @@ import {
 
 const apiBaseUrl = process.env.API_BASE_URL || "http://localhost:3000/api";
 
-console.log(`apiBaseUrl: ${apiBaseUrl}`);
-
 const authenticationClient = new AuthenticationClient();
 const randomObjectServiceClient = new RandomObjectServiceClient(
   apiBaseUrl,
